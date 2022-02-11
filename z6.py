@@ -31,7 +31,6 @@ class SearchResult(object):
     def __init__(self, point, address, postal_code=None):
         self.point = point
         self.address = address
-        self.postal_code = postal_code
 
 
 # Параметры отображения карты:
@@ -109,9 +108,7 @@ class MapParams(object):
             toponym = reverse_geocode(ll(pos[0], pos[1]))
         self.search_result = SearchResult(
             point,
-            toponym["metaDataProperty"]["GeocoderMetaData"]["text"] if toponym else None,
-            toponym["metaDataProperty"]["GeocoderMetaData"]["Address"].get(
-                "postal_code") if toponym else None)
+            toponym["metaDataProperty"]["GeocoderMetaData"]["text"] if toponym else None
 
     # Добавить результат поиска организации на карту.
     def add_reverse_org_search(self, pos):
