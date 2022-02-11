@@ -31,7 +31,6 @@ class SearchResult(object):
     def __init__(self, point, address, postal_code=None):
         self.point = point
         self.address = address
-        self.postal_code = postal_code
 
 
 # Параметры отображения карты:
@@ -109,18 +108,7 @@ class MapParams(object):
             toponym = reverse_geocode(ll(pos[0], pos[1]))
         self.search_result = SearchResult(
             point,
-            toponym["metaDataProperty"]["GeocoderMetaData"]["text"] if toponym else None,
-            toponym["metaDataProperty"]["GeocoderMetaData"]["Address"].get(
-                "postal_code") if toponym else None)
-
-    # Добавить результат поиска организации на карту.
-    def add_reverse_org_search(self, pos):
-        self.search_result = None
-        point = self.screen_to_geo(pos)
-        org = find_business(ll(point[0], point[1]))
-        if not org:
-            return
-        org_point = org["geometry"]["coordinates"]
+            toponym["metaDataProperty"]["GeocoderMetaData"]["text"] if toponym else None)
 
 
 # Создание карты с соответствующими параметрами.
@@ -236,11 +224,6 @@ def main():
                 break
             elif event.type == pygame.KEYUP:  # Обрабатываем различные нажатые клавиши.
                 mp.update(event)
-            elif event.type == pygame.MOUSEBUTTONUP:  # Выполняем поиск по клику мышки.
-                if event.button == 1:  # LEFT_MOUSE_BUTTON
-                    mp.add_reverse_toponym_search(False, event.pos)
-                elif event.button == 3:  # RIGHT_MOUSE_BUTTON
-                    mp.add_reverse_org_search(event.pos)
             else:
                 continue
 
